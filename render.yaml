@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: neuro-san-app
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: ./start.sh
+    envVars:
+      - key: OPENAI_API_KEY
+        sync: false  # Set manually in Render dashboard or .env
+    autoDeploy: true
