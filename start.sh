@@ -2,7 +2,7 @@
 
 echo "🔁 Starting Neuro-SAN with nsflow (FastAPI client)"
 export NEURO_SAN_SERVER_HOST=0.0.0.0
-export NEURO_SAN_SERVER_PORT=30013
+export NEURO_SAN_SERVER_PORT=$PORT #30013
 export NSFLOW_PORT=$PORT
 export AGENT_MANIFEST_FILE=registries/manifest.hocon
 export AGENT_TOOL_PATH=coded_tools
