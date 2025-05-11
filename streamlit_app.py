@@ -1,28 +1,31 @@
 import os
-import subprocess
 import streamlit as st
+from pyhocon import ConfigFactory
+from neuro_san.agent_core.agent_network import AgentNetwork
+from neuro_san.agent_core.agent_input import AgentInput
 
-st.set_page_config(page_title="Neuro-SAN Cloud Demo", layout="centered")
+st.set_page_config(page_title="Embedded Neuro-SAN Agent", layout="wide")
 
-st.title("🧠 Neuro-SAN Cloud Runner")
-st.markdown("Launch and interact with the Neuro-SAN demo from your browser.")
+st.title("🧠 Neuro-SAN Agent in Streamlit")
 
-# Step 1: Ask for API Key
-openai_key = st.text_input("🔑 Enter your OpenAI API Key", type="password")
+st.markdown("This demo loads and executes an agent network directly inside Streamlit.")
 
-# Step 2: Set the API key to the environment if provided
-if openai_key:
-    os.environ["OPENAI_API_KEY"] = openai_key
-    st.success("API Key saved to environment ✅")
+# Let user input a message to the agent
+user_input = st.text_input("What would you like to ask the agent?", "Give me a summary of a recent AI breakthrough.")
 
-# Step 3: Button to launch the server (run.py)
-if st.button("🚀 Launch Neuro-SAN"):
-    st.info("Starting Neuro-SAN... this may take a few seconds.")
-    try:
-        os.makedirs("logs", exist_ok=True)
-        with open("logs/streamlit_output.log", "w") as log:
-            subprocess.Popen(["python", "run.py", "--use-flask-web-client"], stdout=log, stderr=log)
-        st.success("Neuro-SAN launched! Please wait for the web client to be available.")
-        st.markdown("Go to [http://localhost:5003](http://localhost:5003) to interact with the web client.")
-    except Exception as e:
-        st.error(f"Failed to launch Neuro-SAN: {e}")
+# Path to manifest (you can change this to a custom one if needed)
+manifest_path = "registries/manifest.hocon"
+
+try:
+    manifest = ConfigFactory.parse_file(manifest_path)
+    network_name = list(manifest["agent_networks"].keys())[0]  # Use the first defined network
+    network = AgentNetwork.from_hocon(manifest, network_name)
+
+    if user_input:
+        st.markdown("## 🧠 Agent Response")
+        input_obj = AgentInput(input_type="text", input_value=user_input)
+        result = network.run(input_obj)
+        st.success("Agent responded:")
+        st.json(result.dict())
+except Exception as e:
+    st.error(f"Failed to load agent network or process input: {e}")
