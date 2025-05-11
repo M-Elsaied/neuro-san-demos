@@ -39,7 +39,7 @@ class NeuroSanRunner:
         self.neuro_san_server_host = os.getenv("NEURO_SAN_SERVER_HOST", "localhost")
         self.neuro_san_server_port = int(os.getenv("NEURO_SAN_SERVER_PORT", "30013"))
         self.nsflow_port = int(os.getenv("NSFLOW_PORT", "4173"))
-        self.neuro_san_web_client_port = int(os.getenv("NEURO_SAN_WEB_CLIENT_PORT", "5003"))
+        self.neuro_san_web_client_port = int(os.getenv("PORT", os.getenv("NEURO_SAN_WEB_CLIENT_PORT", "5003")))
         thinking_file = "C:\\tmp\\agent_thinking.txt" if self.is_windows else "/tmp/agent_thinking.txt"
         self.thinking_file = os.getenv("THINKING_FILE", thinking_file)
         self.agent_manifest_file = os.getenv(
