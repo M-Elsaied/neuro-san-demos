@@ -1,5 +1,10 @@
 import os
+import sys
 import streamlit as st
+
+# Ensure current directory is on PYTHONPATH
+sys.path.insert(0, os.path.abspath("."))
+
 from pyhocon import ConfigFactory
 from neuro_san.agent_core.agent_network import AgentNetwork
 from neuro_san.agent_core.agent_input import AgentInput
