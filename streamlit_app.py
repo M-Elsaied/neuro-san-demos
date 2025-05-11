@@ -19,6 +19,7 @@ if openai_key:
 if st.button("🚀 Launch Neuro-SAN"):
     st.info("Starting Neuro-SAN... this may take a few seconds.")
     try:
+        os.makedirs("logs", exist_ok=True)
         with open("logs/streamlit_output.log", "w") as log:
             subprocess.Popen(["python", "run.py", "--use-flask-web-client"], stdout=log, stderr=log)
         st.success("Neuro-SAN launched! Please wait for the web client to be available.")
